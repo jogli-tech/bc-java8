@@ -4,266 +4,306 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * Ejemplos de Streams en Java 8
+ * Stream Examples in Java 8
  * 
- * Los streams permiten procesar colecciones de datos de manera funcional,
- * con operaciones intermedias (lazy) y terminales (eager).
+ * Streams provide a functional approach to processing collections
+ * of objects in a declarative way.
  */
 public class StreamExamples {
     
-    public static void ejecutarEjemplos() {
-        ejemplo1_OperacionesBasicas();
-        ejemplo2_FiltradoYTransformacion();
-        ejemplo3_OrdenamientoYLimitacion();
-        ejemplo4_OperacionesMatematicas();
-        ejemplo5_StreamsParalelos();
+    public static void runExamples() {
+        example1_BasicOperations();
+        example2_FilteringAndMapping();
+        example3_SortingAndLimiting();
+        example4_MathematicalOperations();
+        example5_ParallelStreams();
     }
     
     /**
-     * Ejemplo 1: Operaciones básicas de streams
-     * Demuestra la creación y operaciones básicas
+     * Example 1: Basic stream operations
+     * Demonstrates creation and basic operations with streams
      */
-    public static void ejemplo1_OperacionesBasicas() {
-        System.out.println("1. OPERACIONES BÁSICAS");
-        System.out.println("----------------------");
+    public static void example1_BasicOperations() {
+        System.out.println("1. BASIC STREAM OPERATIONS");
+        System.out.println("--------------------------");
         
-        List<String> palabras = Arrays.asList("casa", "coche", "árbol", "libro", "sol");
+        // Creating streams
+        List<String> words = Arrays.asList("java", "stream", "lambda", "functional", "programming");
         
-        // Crear stream desde lista
-        Stream<String> stream = palabras.stream();
+        // Stream from collection
+        System.out.println("Original words: " + words);
         
-        // forEach - operación terminal
-        System.out.println("Palabras originales:");
-        stream.forEach(palabra -> System.out.println("  - " + palabra));
+        // forEach
+        System.out.println("Words in uppercase:");
+        words.stream()
+            .map(String::toUpperCase)
+            .forEach(word -> System.out.println("  " + word));
         
-        // count - contar elementos
-        long cantidad = palabras.stream().count();
-        System.out.println("Cantidad de palabras: " + cantidad);
+        // Stream from array
+        String[] array = {"apple", "banana", "orange"};
+        System.out.println("Fruits from array:");
+        Arrays.stream(array)
+            .forEach(fruit -> System.out.println("  " + fruit));
         
-        // distinct - eliminar duplicados
-        List<String> palabrasConDuplicados = Arrays.asList("casa", "coche", "casa", "árbol", "coche");
-        List<String> sinDuplicados = palabrasConDuplicados.stream()
-            .distinct()
-            .collect(Collectors.toList());
-        System.out.println("Sin duplicados: " + sinDuplicados);
+        // Stream of specific values
+        System.out.println("Numbers 1 to 5:");
+        Stream.of(1, 2, 3, 4, 5)
+            .forEach(number -> System.out.println("  " + number));
         
-        // anyMatch, allMatch, noneMatch
-        boolean hayPalabraLarga = palabras.stream().anyMatch(p -> p.length() > 4);
-        boolean todasCortas = palabras.stream().allMatch(p -> p.length() <= 4);
-        boolean ningunaVacia = palabras.stream().noneMatch(String::isEmpty);
+        // Infinite stream (limited)
+        System.out.println("First 5 even numbers:");
+        Stream.iterate(0, n -> n + 2)
+            .limit(5)
+            .forEach(number -> System.out.println("  " + number));
         
-        System.out.println("¿Hay palabra larga? " + hayPalabraLarga);
-        System.out.println("¿Todas son cortas? " + todasCortas);
-        System.out.println("¿Ninguna está vacía? " + ningunaVacia);
         System.out.println();
     }
     
     /**
-     * Ejemplo 2: Filtrado y transformación
-     * Demuestra filter() y map()
+     * Example 2: Filtering and mapping
+     * Demonstrates filter and map operations
      */
-    public static void ejemplo2_FiltradoYTransformacion() {
-        System.out.println("2. FILTRADO Y TRANSFORMACIÓN");
-        System.out.println("----------------------------");
+    public static void example2_FilteringAndMapping() {
+        System.out.println("2. FILTERING AND MAPPING");
+        System.out.println("------------------------");
         
-        List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        
-        // Filtrar números pares
-        List<Integer> pares = numeros.stream()
-            .filter(n -> n % 2 == 0)
-            .collect(Collectors.toList());
-        System.out.println("Números pares: " + pares);
-        
-        // Transformar números (cuadrados)
-        List<Integer> cuadrados = numeros.stream()
-            .map(n -> n * n)
-            .collect(Collectors.toList());
-        System.out.println("Cuadrados: " + cuadrados);
-        
-        // Filtrar y transformar en cadena
-        List<String> paresComoString = numeros.stream()
-            .filter(n -> n % 2 == 0)
-            .map(n -> "Par: " + n)
-            .collect(Collectors.toList());
-        System.out.println("Pares como string: " + paresComoString);
-        
-        // flatMap - aplanar streams anidados
-        List<List<String>> listasAnidadas = Arrays.asList(
-            Arrays.asList("a", "b"),
-            Arrays.asList("c", "d", "e"),
-            Arrays.asList("f")
+        List<Person> people = Arrays.asList(
+            new Person("Anna", 25, "Engineer"),
+            new Person("Carlos", 30, "Doctor"),
+            new Person("Beatriz", 22, "Teacher"),
+            new Person("David", 35, "Engineer"),
+            new Person("Elena", 28, "Doctor")
         );
         
-        List<String> aplanado = listasAnidadas.stream()
-            .flatMap(List::stream)
+        System.out.println("All people:");
+        people.forEach(person -> System.out.println("  " + person));
+        
+        // Filter by age
+        System.out.println("\nPeople over 25:");
+        people.stream()
+            .filter(person -> person.getAge() > 25)
+            .forEach(person -> System.out.println("  " + person));
+        
+        // Filter by profession
+        System.out.println("\nEngineers:");
+        people.stream()
+            .filter(person -> "Engineer".equals(person.getProfession()))
+            .forEach(person -> System.out.println("  " + person));
+        
+        // Map to names
+        System.out.println("\nNames only:");
+        List<String> names = people.stream()
+            .map(Person::getName)
             .collect(Collectors.toList());
-        System.out.println("Lista aplanada: " + aplanado);
+        names.forEach(name -> System.out.println("  " + name));
         
-        // mapToInt, mapToDouble
-        IntStream intStream = numeros.stream().mapToInt(Integer::intValue);
-        DoubleStream doubleStream = numeros.stream().mapToDouble(Integer::doubleValue);
+        // Map to ages
+        System.out.println("\nAges only:");
+        List<Integer> ages = people.stream()
+            .map(Person::getAge)
+            .collect(Collectors.toList());
+        System.out.println("  " + ages);
         
-        System.out.println("Suma de enteros: " + intStream.sum());
-        System.out.println("Promedio de doubles: " + doubleStream.average().orElse(0.0));
+        // Complex mapping
+        System.out.println("\nFormatted information:");
+        people.stream()
+            .map(person -> person.getName() + " (" + person.getAge() + ") - " + person.getProfession())
+            .forEach(info -> System.out.println("  " + info));
+        
         System.out.println();
     }
     
     /**
-     * Ejemplo 3: Ordenamiento y limitación
-     * Demuestra sorted(), limit(), skip()
+     * Example 3: Sorting and limiting
+     * Demonstrates sorted, limit, skip operations
      */
-    public static void ejemplo3_OrdenamientoYLimitacion() {
-        System.out.println("3. ORDENAMIENTO Y LIMITACIÓN");
+    public static void example3_SortingAndLimiting() {
+        System.out.println("3. SORTING AND LIMITING");
+        System.out.println("-----------------------");
+        
+        List<Integer> numbers = Arrays.asList(5, 2, 8, 1, 9, 3, 7, 4, 6);
+        System.out.println("Original numbers: " + numbers);
+        
+        // Natural sorting
+        System.out.println("Sorted ascending:");
+        numbers.stream()
+            .sorted()
+            .forEach(number -> System.out.print(number + " "));
+        System.out.println();
+        
+        // Reverse sorting
+        System.out.println("Sorted descending:");
+        numbers.stream()
+            .sorted(Collections.reverseOrder())
+            .forEach(number -> System.out.print(number + " "));
+        System.out.println();
+        
+        // Limit
+        System.out.println("First 3 numbers:");
+        numbers.stream()
+            .limit(3)
+            .forEach(number -> System.out.print(number + " "));
+        System.out.println();
+        
+        // Skip
+        System.out.println("Skip first 3 numbers:");
+        numbers.stream()
+            .skip(3)
+            .forEach(number -> System.out.print(number + " "));
+        System.out.println();
+        
+        // Combine operations
+        System.out.println("Top 3 largest numbers:");
+        numbers.stream()
+            .sorted(Collections.reverseOrder())
+            .limit(3)
+            .forEach(number -> System.out.print(number + " "));
+        System.out.println();
+        
+        // Sorting objects
+        List<Person> people = Arrays.asList(
+            new Person("Anna", 25, "Engineer"),
+            new Person("Carlos", 30, "Doctor"),
+            new Person("Beatriz", 22, "Teacher")
+        );
+        
+        System.out.println("\nPeople sorted by age:");
+        people.stream()
+            .sorted(Comparator.comparing(Person::getAge))
+            .forEach(person -> System.out.println("  " + person));
+        
+        System.out.println("People sorted by name:");
+        people.stream()
+            .sorted(Comparator.comparing(Person::getName))
+            .forEach(person -> System.out.println("  " + person));
+        
+        System.out.println();
+    }
+    
+    /**
+     * Example 4: Mathematical operations
+     * Demonstrates reduce, sum, average operations
+     */
+    public static void example4_MathematicalOperations() {
+        System.out.println("4. MATHEMATICAL OPERATIONS");
         System.out.println("---------------------------");
         
-        List<String> nombres = Arrays.asList("Carlos", "Ana", "Beatriz", "David", "Elena");
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        System.out.println("Numbers: " + numbers);
         
-        // Ordenamiento natural
-        List<String> ordenados = nombres.stream()
-            .sorted()
-            .collect(Collectors.toList());
-        System.out.println("Ordenados alfabéticamente: " + ordenados);
-        
-        // Ordenamiento por longitud
-        List<String> ordenadosPorLongitud = nombres.stream()
-            .sorted(Comparator.comparing(String::length))
-            .collect(Collectors.toList());
-        System.out.println("Ordenados por longitud: " + ordenadosPorLongitud);
-        
-        // Ordenamiento descendente
-        List<String> ordenadosDesc = nombres.stream()
-            .sorted(Comparator.reverseOrder())
-            .collect(Collectors.toList());
-        System.out.println("Ordenados descendente: " + ordenadosDesc);
-        
-        // limit - tomar solo los primeros elementos
-        List<String> primeros3 = nombres.stream()
-            .sorted()
-            .limit(3)
-            .collect(Collectors.toList());
-        System.out.println("Primeros 3 ordenados: " + primeros3);
-        
-        // skip - saltar elementos
-        List<String> saltando2 = nombres.stream()
-            .sorted()
-            .skip(2)
-            .collect(Collectors.toList());
-        System.out.println("Saltando los primeros 2: " + saltando2);
-        
-        // Combinar limit y skip
-        List<String> delMedio = nombres.stream()
-            .sorted()
-            .skip(1)
-            .limit(2)
-            .collect(Collectors.toList());
-        System.out.println("Del medio (skip 1, limit 2): " + delMedio);
-        System.out.println();
-    }
-    
-    /**
-     * Ejemplo 4: Operaciones matemáticas
-     * Demuestra operaciones de agregación
-     */
-    public static void ejemplo4_OperacionesMatematicas() {
-        System.out.println("4. OPERACIONES MATEMÁTICAS");
-        System.out.println("-------------------------");
-        
-        List<Integer> numeros = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        
-        // Suma
-        int suma = numeros.stream()
+        // Sum
+        int sum = numbers.stream()
             .mapToInt(Integer::intValue)
             .sum();
-        System.out.println("Suma total: " + suma);
+        System.out.println("Sum: " + sum);
         
-        // Promedio
-        OptionalDouble promedio = numeros.stream()
+        // Average
+        OptionalDouble average = numbers.stream()
             .mapToInt(Integer::intValue)
             .average();
-        promedio.ifPresent(p -> System.out.println("Promedio: " + p));
+        System.out.println("Average: " + average.orElse(0.0));
         
-        // Máximo y mínimo
-        OptionalInt maximo = numeros.stream()
-            .mapToInt(Integer::intValue)
-            .max();
-        OptionalInt minimo = numeros.stream()
-            .mapToInt(Integer::intValue)
-            .min();
+        // Max and Min
+        Optional<Integer> max = numbers.stream().max(Integer::compare);
+        Optional<Integer> min = numbers.stream().min(Integer::compare);
+        System.out.println("Maximum: " + max.orElse(0));
+        System.out.println("Minimum: " + min.orElse(0));
         
-        maximo.ifPresent(max -> System.out.println("Máximo: " + max));
-        minimo.ifPresent(min -> System.out.println("Mínimo: " + min));
-        
-        // reduce - operación personalizada
-        int producto = numeros.stream()
-            .reduce(1, (a, b) -> a * b);
-        System.out.println("Producto: " + producto);
-        
-        // reduce con Optional
-        Optional<Integer> sumaOpcional = numeros.stream()
-            .reduce(Integer::sum);
-        sumaOpcional.ifPresent(s -> System.out.println("Suma con reduce: " + s));
-        
-        // Operaciones con filtros
-        int sumaPares = numeros.stream()
+        // Count
+        long count = numbers.stream()
             .filter(n -> n % 2 == 0)
-            .mapToInt(Integer::intValue)
-            .sum();
-        System.out.println("Suma de pares: " + sumaPares);
+            .count();
+        System.out.println("Even numbers count: " + count);
         
-        double promedioPares = numeros.stream()
-            .filter(n -> n % 2 == 0)
-            .mapToDouble(Integer::doubleValue)
-            .average()
-            .orElse(0.0);
-        System.out.println("Promedio de pares: " + promedioPares);
+        // Reduce - product
+        Optional<Integer> product = numbers.stream()
+            .reduce((a, b) -> a * b);
+        System.out.println("Product: " + product.orElse(0));
+        
+        // Reduce with initial value
+        int sumWithReduce = numbers.stream()
+            .reduce(0, Integer::sum);
+        System.out.println("Sum with reduce: " + sumWithReduce);
+        
+        // Statistics
+        IntSummaryStatistics stats = numbers.stream()
+            .mapToInt(Integer::intValue)
+            .summaryStatistics();
+        System.out.println("Statistics: " + stats);
+        
         System.out.println();
     }
     
     /**
-     * Ejemplo 5: Streams paralelos
-     * Demuestra el procesamiento paralelo
+     * Example 5: Parallel streams
+     * Demonstrates parallel processing with streams
      */
-    public static void ejemplo5_StreamsParalelos() {
-        System.out.println("5. STREAMS PARALELOS");
+    public static void example5_ParallelStreams() {
+        System.out.println("5. PARALLEL STREAMS");
         System.out.println("-------------------");
         
-        // Crear lista grande para demostrar paralelismo
-        List<Integer> numerosGrandes = IntStream.range(1, 1000001)
+        List<Integer> largeList = IntStream.rangeClosed(1, 1000000)
             .boxed()
             .collect(Collectors.toList());
         
-        // Stream secuencial
-        long inicioSecuencial = System.currentTimeMillis();
-        long sumaSecuencial = numerosGrandes.stream()
+        System.out.println("Processing " + largeList.size() + " elements...");
+        
+        // Sequential processing
+        long startTime = System.currentTimeMillis();
+        long sequentialSum = largeList.stream()
             .mapToLong(Integer::longValue)
             .sum();
-        long finSecuencial = System.currentTimeMillis();
+        long sequentialTime = System.currentTimeMillis() - startTime;
         
-        // Stream paralelo
-        long inicioParalelo = System.currentTimeMillis();
-        long sumaParalela = numerosGrandes.parallelStream()
+        // Parallel processing
+        startTime = System.currentTimeMillis();
+        long parallelSum = largeList.parallelStream()
             .mapToLong(Integer::longValue)
             .sum();
-        long finParalelo = System.currentTimeMillis();
+        long parallelTime = System.currentTimeMillis() - startTime;
         
-        System.out.println("Suma secuencial: " + sumaSecuencial);
-        System.out.println("Tiempo secuencial: " + (finSecuencial - inicioSecuencial) + " ms");
-        System.out.println("Suma paralela: " + sumaParalela);
-        System.out.println("Tiempo paralelo: " + (finParalelo - inicioParalelo) + " ms");
+        System.out.println("Sequential sum: " + sequentialSum + " (Time: " + sequentialTime + "ms)");
+        System.out.println("Parallel sum: " + parallelSum + " (Time: " + parallelTime + "ms)");
+        System.out.println("Speedup: " + (double) sequentialTime / parallelTime + "x");
         
-        // Procesamiento paralelo con filtros
-        List<Integer> numerosPares = numerosGrandes.parallelStream()
+        // Parallel filtering and mapping
+        System.out.println("\nParallel filtering example:");
+        List<Integer> evenSquares = IntStream.rangeClosed(1, 100)
+            .parallel()
             .filter(n -> n % 2 == 0)
-            .limit(10)
+            .map(n -> n * n)
+            .boxed()
             .collect(Collectors.toList());
-        System.out.println("Primeros 10 pares (paralelo): " + numerosPares);
         
-        // Ordenamiento paralelo
-        List<Integer> ordenadosParalelo = numerosGrandes.parallelStream()
-            .limit(1000)
-            .sorted()
-            .collect(Collectors.toList());
-        System.out.println("Primeros 1000 ordenados (paralelo): " + ordenadosParalelo.size() + " elementos");
+        System.out.println("First 10 even squares: " + 
+            evenSquares.stream().limit(10).collect(Collectors.toList()));
+        
+        // Check if parallel
+        boolean isParallel = largeList.parallelStream().isParallel();
+        System.out.println("Is parallel stream? " + isParallel);
+        
         System.out.println();
+    }
+    
+    // Helper class for examples
+    static class Person {
+        private String name;
+        private int age;
+        private String profession;
+        
+        public Person(String name, int age, String profession) {
+            this.name = name;
+            this.age = age;
+            this.profession = profession;
+        }
+        
+        public String getName() { return name; }
+        public int getAge() { return age; }
+        public String getProfession() { return profession; }
+        
+        @Override
+        public String toString() {
+            return name + " (" + age + ") - " + profession;
+        }
     }
 } 

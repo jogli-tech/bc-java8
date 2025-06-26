@@ -1,34 +1,64 @@
 package com.jogli.bootcamp.java8;
 
-import com.jogli.bootcamp.java8.lambdas.LambdaExamples;
-import com.jogli.bootcamp.java8.streams.StreamExamples;
+
+import java.util.List;
 
 /**
- * Clase principal que ejecuta todos los ejemplos de Java 8
- * 
- * Esta clase demuestra las características más importantes de Java 8:
- * - Lambdas y expresiones funcionales
- * - Streams y operaciones de flujo
- * - Optionals para manejo de valores nulos
- * - Collectors para agrupación y transformación
- * - Interfaces funcionales
+ * Main class that executes all Java 8 examples
+ * <p>
+ * This class demonstrates the most important features of Java 8:
+ * - Lambdas and functional expressions
+ * - Streams and flow operations
+ * - Optionals for null value handling
+ * - Collectors for grouping and transformation
+ * - Functional interfaces
  */
 public class Main {
-    
-    public static void main(String[] args) {
-        System.out.println("=== EJEMPLOS DE CARACTERÍSTICAS DE JAVA 8 ===\n");
-        
-        // Ejecutar ejemplos de lambdas
-        System.out.println("🔸 EJEMPLOS DE LAMBDAS");
-        System.out.println("=======================");
-        LambdaExamples.ejecutarEjemplos();
-        System.out.println();
-        
-        // Ejecutar ejemplos de streams
-        System.out.println("🔸 EJEMPLOS DE STREAMS");
-        System.out.println("=======================");
-        StreamExamples.ejecutarEjemplos();
-        System.out.println();
-    
+
+    static class Person {
+        private String name;
+        private int age;
+
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getAge() {
+            return age;
+        }
     }
+
+    public static void main(String[] args) {
+        final var persons = List.of(
+                new Person("maria", 12),
+                new Person("pedro", 19),
+                new Person("sol", 21),
+                new Person("pipe", 6)
+        );
+
+        persons.stream()
+                .filter(person -> isOld(person))
+                .map(person -> buildName(person))
+                .forEach(name -> printName(name));
+    }
+
+    private static boolean isOld(final Person person) {
+        return person.age >= 18;
+    }
+
+    private static void printName(final String name) {
+        System.out.println("Name : " + name);
+    }
+
+    private static String buildName(final Person person) {
+        System.out.println("Building Name for - " + person.getName());
+        return person.getName().toUpperCase();
+    }
+
+
 } 
