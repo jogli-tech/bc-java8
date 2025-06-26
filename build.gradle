@@ -3,10 +3,10 @@ plugins {
     id 'application'
 }
 
-group = 'com.example'
+group = 'com.jogli.bootcamp.java8'
 version = '1.0.0'
-sourceCompatibility = '8'
-targetCompatibility = '8'
+sourceCompatibility = '21'
+targetCompatibility = '21'
 
 repositories {
     mavenCentral()
@@ -24,15 +24,14 @@ test {
     useJUnitPlatform()
 }
 
-// Configuración para mostrar información de compilación
 compileJava {
     options.encoding = 'UTF-8'
+    options.compilerArgs = ['-Xlint:-options']
 }
 
-// Tarea personalizada para ejecutar todos los ejemplos
 task runExamples(type: JavaExec) {
     group = 'application'
-    description = 'Ejecuta todos los ejemplos de Java 8'
+    description = 'Run all Java 8 examples'
     mainClass = 'com.jogli.bootcamp.java8.Main'
     classpath = sourceSets.main.runtimeClasspath
 } 

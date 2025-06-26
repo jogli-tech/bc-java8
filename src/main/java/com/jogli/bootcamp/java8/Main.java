@@ -1,14 +1,11 @@
 package com.jogli.bootcamp.java8;
 
-import com.jogli.bootcamp.java8.lambdas.LambdaExamples;
-import com.jogli.bootcamp.java8.streams.StreamExamples;
-import com.jogli.bootcamp.java8.optionals.OptionalExamples;
-import com.jogli.bootcamp.java8.collectors.CollectorExamples;
-import com.jogli.bootcamp.java8.functional.FunctionalExamples;
+
+import java.util.List;
 
 /**
  * Main class that executes all Java 8 examples
- * 
+ * <p>
  * This class demonstrates the most important features of Java 8:
  * - Lambdas and functional expressions
  * - Streams and flow operations
@@ -17,40 +14,51 @@ import com.jogli.bootcamp.java8.functional.FunctionalExamples;
  * - Functional interfaces
  */
 public class Main {
-    
-    public static void main(String[] args) {
-        System.out.println("=== JAVA 8 FEATURES EXAMPLES ===\n");
-        
-        // Execute lambda examples
-        System.out.println("🔸 LAMBDA EXAMPLES");
-        System.out.println("==================");
-        LambdaExamples.runExamples();
-        System.out.println();
-        
-        // Execute stream examples
-        System.out.println("🔸 STREAM EXAMPLES");
-        System.out.println("==================");
-        StreamExamples.runExamples();
-        System.out.println();
-        
-        // Execute optional examples
-        System.out.println("🔸 OPTIONAL EXAMPLES");
-        System.out.println("====================");
-        OptionalExamples.runExamples();
-        System.out.println();
-        
-        // Execute collector examples
-        System.out.println("🔸 COLLECTOR EXAMPLES");
-        System.out.println("=====================");
-        CollectorExamples.runExamples();
-        System.out.println();
-        
-        // Execute functional interface examples
-        System.out.println("🔸 FUNCTIONAL INTERFACE EXAMPLES");
-        System.out.println("=================================");
-        FunctionalExamples.runExamples();
-        System.out.println();
-        
-        System.out.println("✅ All examples have been executed successfully!");
+
+    static class Person {
+        private String name;
+        private int age;
+
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getAge() {
+            return age;
+        }
     }
+
+    public static void main(String[] args) {
+        final var persons = List.of(
+                new Person("maria", 12),
+                new Person("pedro", 19),
+                new Person("sol", 21),
+                new Person("pipe", 6)
+        );
+
+        persons.stream()
+                .filter(person -> isOld(person))
+                .map(person -> buildName(person))
+                .forEach(name -> printName(name));
+    }
+
+    private static boolean isOld(final Person person) {
+        return person.age >= 18;
+    }
+
+    private static void printName(final String name) {
+        System.out.println("Name : " + name);
+    }
+
+    private static String buildName(final Person person) {
+        System.out.println("Building Name for - " + person.getName());
+        return person.getName().toUpperCase();
+    }
+
+
 } 
