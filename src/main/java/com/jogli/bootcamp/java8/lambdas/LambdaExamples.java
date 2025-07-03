@@ -4,220 +4,220 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * Ejemplos de Lambdas en Java 8
+ * Lambda Examples in Java 8
  * 
- * Las lambdas son expresiones que implementan interfaces funcionales
- * de manera concisa y legible.
+ * Lambdas are expressions that implement functional interfaces
+ * in a concise and readable way.
  */
 public class LambdaExamples {
     
-    public static void ejecutarEjemplos() {
-        ejemplo1_LambdasBasicas();
-        ejemplo2_LambdasConParametros();
-        ejemplo3_LambdasEnColecciones();
-        ejemplo4_MethodReferences();
-        ejemplo5_InterfacesFuncionales();
+    public static void runExamples() {
+        example1_BasicLambdas();
+        example2_LambdasWithParameters();
+        example3_LambdasInCollections();
+        example4_MethodReferences();
+        example5_FunctionalInterfaces();
     }
     
     /**
-     * Ejemplo 1: Lambdas básicas
-     * Demuestra la sintaxis básica de las lambdas
+     * Example 1: Basic lambdas
+     * Demonstrates basic lambda syntax
      */
-    public static void ejemplo1_LambdasBasicas() {
-        System.out.println("1. LAMBDAS BÁSICAS");
-        System.out.println("-------------------");
+    public static void example1_BasicLambdas() {
+        System.out.println("1. BASIC LAMBDAS");
+        System.out.println("----------------");
         
-        // Lambda sin parámetros
-        Runnable runnable = () -> System.out.println("Hola desde lambda!");
+        // Lambda without parameters
+        Runnable runnable = () -> System.out.println("Hello from lambda!");
         runnable.run();
         
-        // Lambda con un parámetro
-        Consumer<String> consumer = (String mensaje) -> System.out.println("Mensaje: " + mensaje);
-        consumer.accept("¡Hola mundo!");
+        // Lambda with one parameter
+        Consumer<String> consumer = (String message) -> System.out.println("Message: " + message);
+        consumer.accept("Hello world!");
         
-        // Lambda con inferencia de tipos
-        Consumer<String> consumer2 = mensaje -> System.out.println("Mensaje inferido: " + mensaje);
-        consumer2.accept("¡Tipos inferidos!");
+        // Lambda with type inference
+        Consumer<String> consumer2 = message -> System.out.println("Inferred message: " + message);
+        consumer2.accept("Inferred types!");
         
-        // Lambda con múltiples parámetros
-        BiFunction<Integer, Integer, Integer> suma = (a, b) -> a + b;
-        System.out.println("Suma: " + suma.apply(5, 3));
+        // Lambda with multiple parameters
+        BiFunction<Integer, Integer, Integer> sum = (a, b) -> a + b;
+        System.out.println("Sum: " + sum.apply(5, 3));
         
-        // Lambda con bloque de código
-        BiFunction<Integer, Integer, Integer> multiplicacion = (a, b) -> {
-            int resultado = a * b;
-            System.out.println("Multiplicando " + a + " * " + b + " = " + resultado);
-            return resultado;
+        // Lambda with code block
+        BiFunction<Integer, Integer, Integer> multiplication = (a, b) -> {
+            int result = a * b;
+            System.out.println("Multiplying " + a + " * " + b + " = " + result);
+            return result;
         };
-        multiplicacion.apply(4, 6);
+        multiplication.apply(4, 6);
         System.out.println();
     }
     
     /**
-     * Ejemplo 2: Lambdas con parámetros
-     * Demuestra diferentes formas de usar parámetros en lambdas
+     * Example 2: Lambdas with parameters
+     * Demonstrates different ways to use parameters in lambdas
      */
-    public static void ejemplo2_LambdasConParametros() {
-        System.out.println("2. LAMBDAS CON PARÁMETROS");
-        System.out.println("-------------------------");
+    public static void example2_LambdasWithParameters() {
+        System.out.println("2. LAMBDAS WITH PARAMETERS");
+        System.out.println("--------------------------");
         
-        // Predicate: evalúa una condición
-        Predicate<String> esVacio = str -> str.isEmpty();
-        Predicate<String> esLargo = str -> str.length() > 5;
+        // Predicate: evaluates a condition
+        Predicate<String> isEmpty = str -> str.isEmpty();
+        Predicate<String> isLong = str -> str.length() > 5;
         
-        List<String> palabras = Arrays.asList("", "hola", "programación", "java", "lambda");
+        List<String> words = Arrays.asList("", "hello", "programming", "java", "lambda");
         
-        System.out.println("Palabras originales: " + palabras);
-        System.out.println("¿Está vacía 'hola'? " + esVacio.test("hola"));
-        System.out.println("¿Es largo 'programación'? " + esLargo.test("programación"));
+        System.out.println("Original words: " + words);
+        System.out.println("Is 'hello' empty? " + isEmpty.test("hello"));
+        System.out.println("Is 'programming' long? " + isLong.test("programming"));
         
-        // Combinar predicates
-        Predicate<String> noVacioYLargo = esVacio.negate().and(esLargo);
-        List<String> filtradas = new ArrayList<>();
-        for (String palabra : palabras) {
-            if (noVacioYLargo.test(palabra)) {
-                filtradas.add(palabra);
+        // Combine predicates
+        Predicate<String> notEmptyAndLong = isEmpty.negate().and(isLong);
+        List<String> filtered = new ArrayList<>();
+        for (String word : words) {
+            if (notEmptyAndLong.test(word)) {
+                filtered.add(word);
             }
         }
-        System.out.println("Palabras no vacías y largas: " + filtradas);
+        System.out.println("Non-empty and long words: " + filtered);
         
-        // Function: transforma un valor
-        Function<String, Integer> longitud = String::length;
-        Function<String, String> mayusculas = String::toUpperCase;
+        // Function: transforms a value
+        Function<String, Integer> length = String::length;
+        Function<String, String> uppercase = String::toUpperCase;
         
-        String texto = "hola mundo";
-        System.out.println("Texto original: " + texto);
-        System.out.println("Longitud: " + longitud.apply(texto));
-        System.out.println("En mayúsculas: " + mayusculas.apply(texto));
+        String text = "hello world";
+        System.out.println("Original text: " + text);
+        System.out.println("Length: " + length.apply(text));
+        System.out.println("Uppercase: " + uppercase.apply(text));
         System.out.println();
     }
     
     /**
-     * Ejemplo 3: Lambdas en colecciones
-     * Demuestra el uso de lambdas con listas y mapas
+     * Example 3: Lambdas in collections
+     * Demonstrates using lambdas with lists and maps
      */
-    public static void ejemplo3_LambdasEnColecciones() {
-        System.out.println("3. LAMBDAS EN COLECCIONES");
+    public static void example3_LambdasInCollections() {
+        System.out.println("3. LAMBDAS IN COLLECTIONS");
         System.out.println("-------------------------");
         
-        List<String> nombres = Arrays.asList("Ana", "Carlos", "Beatriz", "David");
+        List<String> names = Arrays.asList("Anna", "Carlos", "Beatriz", "David");
         
-        // forEach con lambda
-        System.out.println("Nombres originales:");
-        nombres.forEach(nombre -> System.out.println("  - " + nombre));
+        // forEach with lambda
+        System.out.println("Original names:");
+        names.forEach(name -> System.out.println("  - " + name));
         
-        // removeIf con lambda
-        List<String> nombresCopia = new ArrayList<>(nombres);
-        nombresCopia.removeIf(nombre -> nombre.startsWith("A"));
-        System.out.println("Nombres sin 'A': " + nombresCopia);
+        // removeIf with lambda
+        List<String> namesCopy = new ArrayList<>(names);
+        namesCopy.removeIf(name -> name.startsWith("A"));
+        System.out.println("Names without 'A': " + namesCopy);
         
-        // replaceAll con lambda
-        List<String> nombresModificados = new ArrayList<>(nombres);
-        nombresModificados.replaceAll(String::toLowerCase);
-        System.out.println("Nombres en minúsculas: " + nombresModificados);
+        // replaceAll with lambda
+        List<String> modifiedNames = new ArrayList<>(names);
+        modifiedNames.replaceAll(String::toLowerCase);
+        System.out.println("Names in lowercase: " + modifiedNames);
         
-        // Map con lambdas
-        Map<String, Integer> edades = new HashMap<>();
-        edades.put("Ana", 25);
-        edades.put("Carlos", 30);
-        edades.put("Beatriz", 22);
+        // Map with lambdas
+        Map<String, Integer> ages = new HashMap<>();
+        ages.put("Anna", 25);
+        ages.put("Carlos", 30);
+        ages.put("Beatriz", 22);
         
-        // forEach en map
-        System.out.println("Edades:");
-        edades.forEach((nombre, edad) -> 
-            System.out.println("  " + nombre + " tiene " + edad + " años"));
+        // forEach in map
+        System.out.println("Ages:");
+        ages.forEach((name, age) -> 
+            System.out.println("  " + name + " is " + age + " years old"));
         
         // computeIfAbsent
-        edades.computeIfAbsent("David", nombre -> 28);
-        System.out.println("Edades después de agregar David: " + edades);
+        ages.computeIfAbsent("David", name -> 28);
+        System.out.println("Ages after adding David: " + ages);
         System.out.println();
     }
     
     /**
-     * Ejemplo 4: Method References
-     * Demuestra las referencias a métodos como forma concisa de lambdas
+     * Example 4: Method References
+     * Demonstrates method references as a concise form of lambdas
      */
-    public static void ejemplo4_MethodReferences() {
+    public static void example4_MethodReferences() {
         System.out.println("4. METHOD REFERENCES");
         System.out.println("--------------------");
         
-        List<String> palabras = Arrays.asList("casa", "coche", "árbol", "libro");
+        List<String> words = Arrays.asList("house", "car", "tree", "book");
         
-        // Referencia a método estático
-        palabras.forEach(System.out::println);
+        // Static method reference
+        words.forEach(System.out::println);
         
-        // Referencia a método de instancia
-        List<String> mayusculas = new ArrayList<>();
-        palabras.forEach(mayusculas::add);
-        System.out.println("Lista en mayúsculas: " + mayusculas);
+        // Instance method reference
+        List<String> uppercaseList = new ArrayList<>();
+        words.forEach(uppercaseList::add);
+        System.out.println("Uppercase list: " + uppercaseList);
         
-        // Referencia a constructor
-        List<String> palabrasList = palabras.stream()
+        // Constructor reference
+        List<String> wordsList = words.stream()
             .map(String::new)
             .collect(java.util.stream.Collectors.toList());
-        System.out.println("Nuevas instancias: " + palabrasList);
+        System.out.println("New instances: " + wordsList);
         
-        // Referencia a método de instancia de clase arbitraria
-        List<Integer> longitudes = palabras.stream()
+        // Instance method reference of arbitrary class
+        List<Integer> lengths = words.stream()
             .map(String::length)
             .collect(java.util.stream.Collectors.toList());
-        System.out.println("Longitudes: " + longitudes);
+        System.out.println("Lengths: " + lengths);
         
-        // Referencia a método estático personalizado
-        List<String> palabrasFormateadas = palabras.stream()
-            .map(LambdaExamples::formatearPalabra)
+        // Custom static method reference
+        List<String> formattedWords = words.stream()
+            .map(LambdaExamples::formatWord)
             .collect(java.util.stream.Collectors.toList());
-        System.out.println("Palabras formateadas: " + palabrasFormateadas);
+        System.out.println("Formatted words: " + formattedWords);
         System.out.println();
     }
     
     /**
-     * Ejemplo 5: Interfaces funcionales personalizadas
-     * Demuestra cómo crear y usar interfaces funcionales propias
+     * Example 5: Custom functional interfaces
+     * Demonstrates how to create and use custom functional interfaces
      */
-    public static void ejemplo5_InterfacesFuncionales() {
-        System.out.println("5. INTERFACES FUNCIONALES PERSONALIZADAS");
-        System.out.println("----------------------------------------");
+    public static void example5_FunctionalInterfaces() {
+        System.out.println("5. CUSTOM FUNCTIONAL INTERFACES");
+        System.out.println("-------------------------------");
         
-        // Interfaz funcional personalizada
-        Calculadora suma = (a, b) -> a + b;
-        Calculadora multiplicacion = (a, b) -> a * b;
-        Calculadora potencia = (a, b) -> (int) Math.pow(a, b);
+        // Custom functional interface
+        Calculator sum = (a, b) -> a + b;
+        Calculator multiplication = (a, b) -> a * b;
+        Calculator power = (a, b) -> (int) Math.pow(a, b);
         
-        System.out.println("5 + 3 = " + suma.calcular(5, 3));
-        System.out.println("4 * 6 = " + multiplicacion.calcular(4, 6));
-        System.out.println("2 ^ 8 = " + potencia.calcular(2, 8));
+        System.out.println("5 + 3 = " + sum.calculate(5, 3));
+        System.out.println("4 * 6 = " + multiplication.calculate(4, 6));
+        System.out.println("2 ^ 8 = " + power.calculate(2, 8));
         
-        // Interfaz funcional con método por defecto
-        Validador<String> validadorLargo = str -> str.length() > 5;
-        Validador<String> validadorVocal = str -> str.matches(".*[aeiou].*");
+        // Functional interface with default method
+        Validator<String> longValidator = str -> str.length() > 5;
+        Validator<String> vowelValidator = str -> str.matches(".*[aeiou].*");
         
-        String texto = "programación";
-        System.out.println("Texto: " + texto);
-        System.out.println("¿Es largo? " + validadorLargo.validar(texto));
-        System.out.println("¿Tiene vocales? " + validadorVocal.validar(texto));
-        System.out.println("¿Es válido? " + validadorLargo.and(validadorVocal).validar(texto));
+        String text = "programming";
+        System.out.println("Text: " + text);
+        System.out.println("Is long? " + longValidator.validate(text));
+        System.out.println("Has vowels? " + vowelValidator.validate(text));
+        System.out.println("Is valid? " + longValidator.and(vowelValidator).validate(text));
         System.out.println();
     }
     
-    // Método auxiliar para method references
-    public static String formatearPalabra(String palabra) {
-        return "[" + palabra.toUpperCase() + "]";
+    // Helper method for method references
+    public static String formatWord(String word) {
+        return "[" + word.toUpperCase() + "]";
     }
     
-    // Interfaz funcional personalizada
+    // Custom functional interface
     @FunctionalInterface
-    interface Calculadora {
-        int calcular(int a, int b);
+    interface Calculator {
+        int calculate(int a, int b);
     }
     
-    // Interfaz funcional con método por defecto
+    // Functional interface with default method
     @FunctionalInterface
-    interface Validador<T> {
-        boolean validar(T t);
+    interface Validator<T> {
+        boolean validate(T t);
         
-        default Validador<T> and(Validador<T> otro) {
-            return t -> this.validar(t) && otro.validar(t);
+        default Validator<T> and(Validator<T> other) {
+            return t -> this.validate(t) && other.validate(t);
         }
     }
 } 
