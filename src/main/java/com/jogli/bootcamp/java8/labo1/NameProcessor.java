@@ -7,7 +7,7 @@ public class NameProcessor {
     public static void processNames() {
         getNames()
                 .filter(name -> startWithVocal(name))
-                .forEach(name -> System.out.println("Name: " + name));
+                .forEach(name -> System.out.println("Name= " + name));
     }
 
     public static boolean startWithVocal(String name) {
